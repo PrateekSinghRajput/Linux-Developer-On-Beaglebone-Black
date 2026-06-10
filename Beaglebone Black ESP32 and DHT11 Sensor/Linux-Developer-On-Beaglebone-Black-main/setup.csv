@@ -1,0 +1,109 @@
+
+sudo apt update
+sudo apt install cmake -y
+
+sudo apt update
+sudo apt install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+
+cd ~/Beaglebone_Black/build
+rm -rf *
+
+cmake .. \
+  -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc \
+  -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++ \
+  -DCMAKE_C_FLAGS="-mcpu=cortex-a8 -mfpu=neon-vfpv3 -mfloat-abi=hard" \
+  -DCMAKE_CXX_FLAGS="-mcpu=cortex-a8 -mfpu=neon-vfpv3 -mfloat-abi=hard"
+
+  
+
+  make -j4
+
+  scp lvglsim debian@192.168.2.246:~/
+
+
+
+CAN Communication for test on beaglebone black
+
+sudo ip link set can0 type can bitrate 500000 loopback on
+sudo ip link set can0 up
+
+
+candump can0
+
+
+cansend can0 123#DEADBEEF
+
+
+sudo config-pin P9.24 can
+sudo config-pin P9.26 can
+sudo ip link set can1 type can bitrate 500000 loopback on
+sudo ip link set can1 up
+
+
+cansend can1 123#DEADBEEF
+
+
+############### I want to run the program after switch on automatic ####################
+
+
+nano /home/debian/start_app.sh
+
+#!/bin/bash
+# 1. Configure the hardware pins
+config-pin P9.24 uart
+config-pin P9.26 uart
+
+# 2. Navigate to your app directory and run it
+cd /home/debian
+./lvglsim
+
+chmod +x /home/debian/start_app.sh
+
+sudo nano /etc/systemd/system/lvglsim.service
+
+/*
+
+[Unit]
+Description=LVGL Framebuffer Simulation Application
+After=local-fs.target generic-board-startup.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/home/debian/start_app.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
+/*
+
+
+# Reload the systemd manager to discover the new service
+sudo systemctl daemon-reload
+
+# Enable it to run automatically on boot
+sudo systemctl enable lvglsim.service
+
+# Start it immediately without rebooting
+sudo systemctl start lvglsim.service
+
+
+############# Now if i want to remove the all thing what i save it ################
+
+# 1. Stop the application if it is currently running
+sudo systemctl stop lvglsim.service
+
+# 2. Disable it so it never runs on boot again
+sudo systemctl disable lvglsim.service
+
+# 3. Remove the systemd service configuration file
+sudo rm /etc/systemd/system/lvglsim.service
+
+# 4. Tell systemd to refresh its database and forget the service
+sudo systemctl daemon-reload
+sudo systemctl reset-failed
+
+# 5. Delete the startup script from your home folder
+rm /home/debian/start_app.sh
