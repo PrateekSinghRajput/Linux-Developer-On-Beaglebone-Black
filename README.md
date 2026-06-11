@@ -2,16 +2,15 @@
 
 This repository contains configuration notes and reference code for interfacing the **BeagleBone Black (BBB)** with **CAN Bus** and **UART** peripheral devices.
 
-## 1. CAN Bus Configuration (P9 Header)
+## 1. CAN Bus Configuration 
 
 The BeagleBone Black provides access to CAN controllers via the P9 expansion header. 
 
-#!/bin/bash
-# Initialize CAN on P9.24/26
+# Initialize CAN 
 config-pin P9.24 can
 config-pin P9.26 can
 
-# Initialize UART2 on P9.21/22
+# Initialize UART2 
 config-pin P9.21 uart
 config-pin P9.22 uart
 
@@ -30,12 +29,6 @@ echo "Hardware initialized: CAN1 on P9.24/26, UART2 on P9.21/22"
 ### Setup Commands
 To initialize the CAN interface, run the following commands on the BeagleBone:
 
-```bash
-# 1. Configure Pin Multiplexing
-sudo config-pin P9.24 can
-sudo config-pin P9.26 can
-
-# 2. Set Interface Parameters (Standard 250kbps)
 sudo ip link set can1 type can bitrate 250000
 
 # 3. Bring the interface online
