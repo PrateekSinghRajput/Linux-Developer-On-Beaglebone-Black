@@ -16,9 +16,8 @@ config-pin P9.22 uart
 
 # Bring up CAN network
 ip link set can1 type can bitrate 250000
-ip link set can1 up
 
-echo "Hardware initialized: CAN1 on P9.24/26, UART2 on P9.21/22"
+ip link set can1 up
 
 ### Pin Mapping
 | Function | BeagleBone Pin | Pin Description |
