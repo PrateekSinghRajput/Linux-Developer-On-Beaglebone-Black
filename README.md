@@ -21,6 +21,12 @@ BBB              CAN Transreciver
 24_Tx            Rx
 26_Rx            Tx
 
+### Pin Mapping
+| FBBB |  CAN Transreciver | |
+| :--- | :--- | :--- |
+| **24_Tx** | Rx | |
+| **26_Rx** | Tx | |
+
 # Bring up CAN network
 ip link set can1 type can bitrate 250000
 
