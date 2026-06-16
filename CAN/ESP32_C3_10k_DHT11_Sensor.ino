@@ -7,7 +7,7 @@
 #define DHTPIN 4           // DHT11 connected to GPIO 4 (digital pin)
 #define GAS_SENSOR_PIN 5   // MQ135 gas sensor connected to GPIO 5 (analog-capable)
 #define POT_PIN 3          // Potentiometer (if needed) - GPIO 3
-#define CAN_CS_PIN 5       // MCP2515 CS pin - ESP32 default GPIO 5
+#define CAN_CS_PIN 7       // MCP2515 CS pin - ESP32 default GPIO 5
 
 // DHT Configuration
 #define DHTTYPE DHT11
