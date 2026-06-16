@@ -30,5 +30,8 @@ To initialize the CAN interface, run the following commands on the BeagleBone:
 
 sudo ip link set can1 type can bitrate 250000
 
+
+<img width="1194" height="901" alt="BBB" src="https://github.com/user-attachments/assets/c05eeea9-ff35-422f-bd23-e289957f2847" />
+
 # 3. Bring the interface online
 sudo ip link set can1 up
