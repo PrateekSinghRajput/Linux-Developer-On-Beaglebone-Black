@@ -17,10 +17,6 @@ config-pin P9.26 can
 config-pin P9.21 uart
 config-pin P9.22 uart
 
-BBB              CAN Transreciver
-24_Tx            Rx
-26_Rx            Tx
-
 ### Pin Mapping
 | FBBB |  CAN Transreciver | |
 | :--- | :--- | :--- |
