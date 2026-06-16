@@ -14,33 +14,10 @@ cmake .. \
   -DCMAKE_C_FLAGS="-mcpu=cortex-a8 -mfpu=neon-vfpv3 -mfloat-abi=hard" \
   -DCMAKE_CXX_FLAGS="-mcpu=cortex-a8 -mfpu=neon-vfpv3 -mfloat-abi=hard"
 
-  
 
   make -j4
 
-  scp lvglsim debian@192.168.2.246:~/
-
-
-
-CAN Communication for test on beaglebone black
-
-sudo ip link set can0 type can bitrate 500000 loopback on
-sudo ip link set can0 up
-
-
-candump can0
-
-
-cansend can0 123#DEADBEEF
-
-
-sudo config-pin P9.24 can
-sudo config-pin P9.26 can
-sudo ip link set can1 type can bitrate 500000 loopback on
-sudo ip link set can1 up
-
-
-cansend can1 123#DEADBEEF
+  scp lvglsim debian@192.168.2.88:~/
 
 
 ############### I want to run the program after switch on automatic ####################
@@ -107,3 +84,40 @@ sudo systemctl reset-failed
 
 # 5. Delete the startup script from your home folder
 rm /home/debian/start_app.sh
+
+
+################
+
+#### For UART ####
+
+config-pin P9.21 uart
+config-pin P9.22 uart
+
+stty -F /dev/ttyS2 9600
+
+cat /dev/ttyS2
+
+
+
+#### For CAN ####
+
+# Configure pins P9.24 and P9.26 for CAN communication
+sudo config-pin P9.24 can
+sudo config-pin P9.26 can
+
+# Bring up the can1 network interface at a standard industrial bitrate (250kbps or 500kbps)
+sudo ip link set can1 type can bitrate 250000
+sudo ip link set can1 up
+
+sudo ./lvglsim
+
+sudo setcap cap_net_admin+ep ./lvglsim
+
+./lvglsim
+
+
+______________ for Test ____________________
+
+candump can1
+cansend can1 123#DEADBEEF
+
